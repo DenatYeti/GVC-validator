@@ -1,0 +1,34 @@
+name: Validate Graph Coloring Solutions
+ 
+on:
+  push:
+    paths:
+      - solutions/*.sol
+ 
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+ 
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+ 
+    - name: Install dependencies (if any)
+      run: pip install -r requirements.txt || true
+ 
+    - name: Validate solutions
+      run: |
+        for solution in solutions/*.sol; do
+          instance=$(basename "$solution" .sol).col
+          python checker.py instances/$instance $solution
+        done
+ 
+    - name: Update best solutions
+      run: |
+        # Script to update best_solutions.md if a new upper bound is found
+        python update_best.py
+    ```
