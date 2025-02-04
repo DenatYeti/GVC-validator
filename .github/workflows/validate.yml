@@ -24,10 +24,11 @@ jobs:
       run: |
         for solution in solutions/*.sol; do
           instance=$(basename "$solution" .sol).col
-          python checker.py instances/$instance $solution
+          python checker.py instances/$instance $solution || exit 1
         done
  
     - name: Update best solutions
+      if: success()
       run: |
         # Script to update best_solutions.md if a new upper bound is found
         python update_best.py
