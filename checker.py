@@ -12,7 +12,9 @@ def read_dimacs_file(filename):
 def read_solution_file(filename):
     with open(filename, 'r') as file:
         colors = [int(line.strip()) for line in file if line.strip()]
-    return colors
+    
+    solution = {i + 1: colors[i] for i in range(len(colors))}
+    return solution
  
 def check_solution(dimacs_file, solution_file):
     edges = read_dimacs_file(dimacs_file)
