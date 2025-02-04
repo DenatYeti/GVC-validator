@@ -7,7 +7,7 @@
 | 1-FullIns_5.col | 6 |
 | 1-Insertions_4.col | 5 |
 | 1-Insertions_5.col | 6 |
-| 1-Insertions_6.com | 7 |
+| 1-Insertions_6.col | 7 |
 | 2-FullIns_3.col | 5 |
 | 2-FullIns_4.col | 6 |
 | 2-FullIns_5.col | 7 |
