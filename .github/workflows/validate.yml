@@ -32,4 +32,3 @@ jobs:
       run: |
         # Script to update best_solutions.md if a new upper bound is found
         python update_best.py
-    ```
