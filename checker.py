@@ -11,13 +11,7 @@ def read_dimacs_file(filename):
  
 def read_solution_file(filename):
     with open(filename, 'r') as file:
-        colors = {}
-        i = 1
-        for line in file:
-            vertex = i
-            i += 1
-            color = line
-            colors[vertex] = color
+        colors = [int(line.strip()) for line in file if line.strip()]
     return colors
  
 def check_solution(dimacs_file, solution_file):
