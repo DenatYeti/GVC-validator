@@ -2,7 +2,7 @@ import os
  
 def read_solution_file(filename):
     with open(filename, 'r') as file:
-        return len(set(map(int, [line.split()[1] for line in file])))
+        return len(set(map(int, [line.split()[0] for line in file])))
  
 def update_best_solutions():
     best_solutions = {}

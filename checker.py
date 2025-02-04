@@ -12,8 +12,7 @@ def read_dimacs_file(filename):
 def read_solution_file(filename):
     with open(filename, 'r') as file:
         colors = [int(line.strip()) for line in file if line.strip()]
-    
-    solution = {i + 1: colors[i] for i in range(len(colors))}
+    solution = {i + 1: colors[i] for i in range(len(colors))} # if removed, then the first line will correspond to node 0 which is not a node.
     return solution
  
 def check_solution(dimacs_file, solution_file):
