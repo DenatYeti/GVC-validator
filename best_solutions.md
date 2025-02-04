@@ -13,3 +13,4 @@
 | 2-FullIns_5.col | 7 |
 | 2-Insertions_3.col | 4 |
 | 2-Insertions_4.col | 5 |
+| 1-Insertions_6.col | 7 |
