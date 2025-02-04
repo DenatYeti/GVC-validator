@@ -1,6 +1,6 @@
 | Instance | Best Upper Bound |
 |----------|------------------|
-| 1-FullIns_3.col | 4 |
+| 1-FullIns_3.col | 10 |
 | 1-FullIns_4.col | 5 |
 | 1-FullIns_5.col | 6 |
 | 1-Insertions_4.col | 5 |
