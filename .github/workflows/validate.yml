@@ -32,3 +32,12 @@ jobs:
       run: |
         # Script to update best_solutions.md if a new upper bound is found
         python update_best.py
+
+    - name: Commit and Push Changes
+      if: success()
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user..email 'github-actions@github.com'
+        git add best_solutions.md
+        git commit -m "Updated best known solutions" || exit 0
+        git push
