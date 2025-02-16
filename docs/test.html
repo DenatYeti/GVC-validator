@@ -21,7 +21,7 @@
                                         .then(response => response.json())
                                         .then(data => console.log(data))  // Check if data loads
                                         .catch(error => console.error("Error loading JSON:", error));
-                let data = await resoonse.json();
+                let data = await response.json();
                 
                 let keys = Object.keys(data[0]).filter(key => typeof data[0][key] === "number");
                 let dropdown = document.getElementById("colorBy");
