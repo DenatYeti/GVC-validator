@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dynamic ISA Plot</title>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+    <body>
+        
+        <h1>Interactive Instance Space Analysis Plot</h1>
+
+        <label for="colorBy">Color by:</label>
+        <select id="colorBy">
+            <option value="category">Category</option>
+            <option value="size">Size</option>
+        </select>
+
+        <div id="plot"></div>
+
+        <script>
+            async function drawPlot(colorBy= "category") {
+                let response = await fetch("data.json");
+                let data = await resoonse.json();
+
+                let x = data.map(d => d.x);
+                let y = data.map(d => d.y);
+                let color = data.map(d => d[colorBy]);
+
+                let trace = {
+                    x: x,
+                    y: y,
+                    mode: "markers",
+                    marker: {size:10, color:color, colorscale:"Bluered"}
+                };
+
+                let layout = {title: "Dynamic Coloring Example"};
+
+                Plotly.newPlot("plot", [trace], layout)
+            }
+
+            drawPlot();
+
+            document.getElementById("colorBy").addEventListener("change", function() {
+                drawPlot(this.value);
+            });
+        </script>
+        
+    </body>
+</html>
