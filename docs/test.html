@@ -11,27 +11,37 @@
         <h1>Interactive Instance Space Analysis Plot</h1>
 
         <label for="colorBy">Color by:</label>
-        <select id="colorBy">
-            <option value="category">Category</option>
-            <option value="size">Size</option>
-        </select>
+        <select id="colorBy"></select>
 
         <div id="plot"></div>
 
         <script>
-            async function drawPlot(colorBy= "category") {
+            async function drawPlot(colorBy = "IsBetaEasy") {
                 let response = await fetch("data.json");
                 let data = await resoonse.json();
+                
+                let keys = Object.keys(data[0]).filter(key => typeof data[0][key] === "number");
+                let dropdown = document.getElementById("colorBy");
 
-                let x = data.map(d => d.x);
-                let y = data.map(d => d.y);
+                if (dropdown.options.length === 0) {
+                    keys.forEach(key => {
+                        let option = document.createElement("option");
+                        option.value = key;
+                        option.textContent = key;
+                        dropdown.appendChild(option);
+                    });
+                }
+
+                let x = data.map(d => d.z_1);
+                let y = data.map(d => d.z_2);
                 let color = data.map(d => d[colorBy]);
 
                 let trace = {
                     x: x,
                     y: y,
                     mode: "markers",
-                    marker: {size:10, color:color, colorscale:"Bluered"}
+                    marker: {size:10, color:color, colorscale:"Bluered", showscale:true},
+                    text: data.map(d => d.instance_name)
                 };
 
                 let layout = {title: "Dynamic Coloring Example"};
