@@ -23,7 +23,8 @@
                 let dropdown = document.getElementById("colorBy");
 
                 if (dropdown.options.length === 0) {
-                    keys.forEach(key => {
+                    keys.filter(key => !["z_1","z_2"].includes(key))
+                        .forEach(key => {
                         let option = document.createElement("option");
                         option.value = key;
                         option.textContent = key;
