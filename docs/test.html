@@ -5,25 +5,53 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dynamic ISA Plot</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.14.0/plotly.min.js"></script>
+        <style>
+            /* Flexbox which allows for aligning the two plots to be placed side by side */
+            .container {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                width: 100%;
+                height: 90vh;
+            }
+            .plot-container{
+                width: 48%;
+            }
+            select {
+                width: 25%;
+                margin-bottom: 10px;
+            }
+        </style>
     </head>
     <body>
         
         <h1>Interactive Instance Space Analysis Plot</h1>
-
-        <label for="colorBy">Color by:</label>
-        <select id="colorBy"></select>
-
-        <div id="plot"></div>
+        <div class = "container">
+            <div class="plot-container">
+                <label for="colorBy1">Color plot 1 by:</label>
+                <select id="colorBy1"></select>
+                <div id="plot1"></div>
+            </div>
+            
+            <div class="plot-container">
+                <label for="colorBy2">Color plot 2 by:</label>
+                <select id="colorBy2"></select>
+                <div id="plot2"></div>
+            </div>
+        </div>
+       
+        
         <script src="data.js"></script>
         <script>
-            async function drawPlot(colorBy = "IsBetaEasy") {
+            async function drawPlot(plotId, dropdownId, colorBy = "IsBetaEasy") {
                 let data = jsonData;
                 
                 let keys = Object.keys(data[0]).filter(key => typeof data[0][key] === "number");
-                let dropdown = document.getElementById("colorBy");
+                let dropdown = document.getElementById(dropdownId) 
+                let blacklist = ["z_1", "z_2"]
 
                 if (dropdown.options.length === 0) {
-                    keys.filter(key => !["z_1","z_2"].includes(key))
+                    keys.filter(key => !blacklist.includes(key) && !key.endsWith("raw"))
                         .forEach(key => {
                         let option = document.createElement("option");
                         option.value = key;
@@ -36,27 +64,46 @@
                 let y = data.map(d => d.z_2);
                 let color = data.map(d => d[colorBy]);
 
-                let trace = {
-                    x: x,
-                    y: y,
-                    mode: "markers",
-                    marker: {size:8, color:color, colorscale:"Bluered", showscale:true},
-                    text: data.map(d => `Instance: ${d.instance_name}<br>${colorBy}: ${d[colorBy]}`)
-                };
+                let trace; // Declare trace before the if-else
 
+                if (colorBy.endsWith("_bin") || colorBy.endsWith("_perf") || colorBy == "IsBetaEasy" || colorBy == "NumGoodAlgos") {
+                    trace = {
+                        x: x,
+                        y: y,
+                        mode: "markers",
+                        marker: { size: 8, color: color, colorscale: "Bluered", showscale: true },
+                        text: data.map(d => `Instance: ${d.instance_name}<br>${colorBy}: ${d[colorBy]}`)
+                    };
+                } else {
+                    trace = {
+                        x: x,
+                        y: y,
+                        mode: "markers",
+                        marker: { size: 8, color: color, colorscale: "Bluered", showscale: true },
+                        text: data.map(d => `Instance: ${d.instance_name}<br>${colorBy}: ${d[colorBy + "_raw"] || "N/A"}`)
+                    };
+                }
+
+                
                 let layout = {
-                    title: "Dynamic Coloring Example",
+                    title: "Instance Space Analysis",
                     width: window.innerWidth * 0.5,
                     height: window.innerHeight * 0.9
                 };
 
-                Plotly.newPlot("plot", [trace], layout)
+                Plotly.newPlot(plotId, [trace], layout)
             }
 
-            drawPlot();
+            drawPlot("plot1", "colorBy1");
+            drawPlot("plot2", "colorBy2");
 
-            document.getElementById("colorBy").addEventListener("change", function() {
-                drawPlot(this.value);
+
+            document.getElementById("colorBy1").addEventListener("change", function() {
+                drawPlot("plot1","colorBy1",this.value);
+            });
+
+            document.getElementById("colorBy2").addEventListener("change", function() {
+                drawPlot("plot2","colorBy2",this.value);
             });
         </script>
         
