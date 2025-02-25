@@ -94,33 +94,7 @@ def algo_performance(algos, feature_dict,path_to_best):
             algo_dict[instance_name]['best'] = algo_dict[instance_name]['best_performance']
 
     return algo_dict
-##
-# This Auxiliary method is only needed if pyhard is used, to visualize locally.
-# If only used for the github pages site, then this is no longer needed.
-##
 
-def make_ih(algos, perf_thres, feature_dict, algo_dict): 
-    with open(f"./isa/ih.csv", mode="w", newline="") as file:
-        writer = csv.writer(file)
-
-        writer.writerow(['instances', 'instance_hardness'])
-        iterator = 1
-        for instance_name in feature_dict:
-            hardness = 1.0
-            num_algo = len(algos)
-            best_perf = algo_dict[instance_name]['best_performance']
-            for algo in algos+['best']:
-                algo_perf = algo_dict[instance_name][algo]
-                if best_perf != 0: # division by zero
-                    perf_ratio = (algo_perf - best_perf) / best_perf
-                else: 
-                    perf_ratio = 0
-
-                if perf_ratio < perf_thres:
-                    hardness = hardness - 1/num_algo
-            writer.writerow([iterator] + [hardness])
-            iterator = iterator + 1
-    print("ih.csv created")
 
 #this needs a big update as it doesnt do what i want it to do.
 #also needs to add some feature selection
@@ -197,8 +171,7 @@ def make_file(algos, path, filename, standardize = False):
 
                 writer.writerow(row)
                 iterator += 1    
-            #make_ih(algos, 0.0125, feature_dict, algo_dict) # Deprecated if pyhard is no longer used.
-
+            
         elif filename == 'data.csv':
             data_header = [col.removeprefix("feature_") for col in header]
             writer.writerow(data_header)
@@ -225,15 +198,6 @@ def test():
     
     os.chdir("./isa")
     os.system("isa")
-
-def matilda_test_file():
-    timestamp = time.time()
-    path = './Resources'
-    algos = ['DSATUR', 'Greedy', 'RLF','HEA','TABUCOL']
-
-    make_file(algos,path, "metadata.csv")
-    end = time.time()
-    print(end - timestamp)
 
 test()
 #matilda_test_file()
