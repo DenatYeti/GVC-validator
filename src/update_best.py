@@ -25,7 +25,7 @@ def load_best_solutions():
 def update_best_solutions():
     best_solutions = load_best_solutions()
 
-    for solution_file in os.listdir("solutions"):
+    for solution_file in os.listdir("/Resources/solutions/*"):
         instance = solution_file.replace(".sol", ".col")
         new_bound = read_solution_file(os.path.join("solutions", solution_file))
         if new_bound < best_solutions.get(instance, float("inf")):
