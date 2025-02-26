@@ -7,10 +7,10 @@ def read_solution_file(filename):
 
 def load_best_solutions():
     best_solutions = {}
-    if not os.path.exists("best_solutions.md"):
+    if not os.path.exists("../best_solutions.md"):
         return best_solutions
     
-    with open("best_solutions.md", "r") as file:
+    with open("../best_solutions.md", "r") as file:
         lines = file.readlines()
         for line in lines:
             if line.startswith("|") and not line.startswith("| Instance") and not line.startswith("|-"):
@@ -25,14 +25,16 @@ def load_best_solutions():
 def update_best_solutions():
     best_solutions = load_best_solutions()
 
-    for root, dirs, file in os.walk("/Resources/solutions"):
-        solution_file = os.path.join(root, file)
-        instance = solution_file.replace(".sol", ".col")
-        new_bound = read_solution_file(os.path.join("solutions", solution_file))
-        if new_bound < best_solutions.get(instance, float("inf")):
-            best_solutions[instance] = new_bound
+    for root, _, files in os.walk("/Resources/solutions"):
+        for file in files:
+            if file.endswith(".sol"):
+                solution_file = os.path.join(root, file)
+                instance = solution_file.replace(".sol", ".col")
+                new_bound = read_solution_file(solution_file)
+                if new_bound < best_solutions.get(instance, float("inf")):
+                    best_solutions[instance] = new_bound
  
-    with open("best_solutions.md", "w") as file:
+    with open("../best_solutions.md", "w") as file:
         file.write("# Best Solutions for Graph Coloring Instances\n\n")
         file.write("| Instance | Best Upper Bound |\n")
         file.write("|----------|------------------|\n")
