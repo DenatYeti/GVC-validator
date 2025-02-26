@@ -22,7 +22,7 @@ jobs:
  
     - name: Validate solutions
       run: |
-        for solution in $(ls solutions/*/*.sol); do
+        for solution in Resources/solutions/*/*.sol; do
           instance=$(basename "$solution" .sol).col
           echo $instance
           python src/checker.py Resources/instances/$instance $solution || exit 1
