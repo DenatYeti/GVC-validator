@@ -24,6 +24,7 @@ jobs:
       run: |
         for solution in solutions/*/*.sol; do
           instance=$(basename "$solution" .sol).col
+          echo $instance
           python src/checker.py Resources/instances/$instance $solution || exit 1
         done
  
