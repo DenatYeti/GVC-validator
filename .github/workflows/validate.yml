@@ -3,7 +3,7 @@ name: Validate Graph Coloring Solutions
 on:
   push:
     paths:
-      - solutions/*.sol
+      - Resources/solutions/*/*.sol
  
 jobs:
   validate:
@@ -22,16 +22,16 @@ jobs:
  
     - name: Validate solutions
       run: |
-        for solution in solutions/*.sol; do
+        for solution in solutions/*/*.sol; do
           instance=$(basename "$solution" .sol).col
-          python checker.py instances/$instance $solution || exit 1
+          python src/checker.py Resources/instances/$instance $solution || exit 1
         done
  
     - name: Update best solutions
       if: success()
       run: |
         # Script to update best_solutions.md if a new upper bound is found
-        python update_best.py
+        python src/update_best.py
 
     - name: Commit and Push Changes
       if: success()

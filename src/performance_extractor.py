@@ -2,8 +2,35 @@ import os
 import os.path
 import csv
 import time
-#import argparse
 
+def get_best(best_solutions_path):
+    best_dict = {}
+
+    with open(best_solutions_path, mode='r', encoding = 'utf-8') as file:
+        lines = file.readlines()
+
+    table_lines = [line.strip() for line in lines if line.strip().startswith("|")]
+
+    if not table_lines:
+        print("No markdown table found in the specified file.")
+    else: 
+        # first row should be the header
+        header = [col.strip() for col in table_lines[0].strip("|").split("|")]
+
+        #skipping the second row as the format means that it is a separator row
+        for row_line in table_lines[2:]:
+            row_data = [cell.strip() for cell in row_line.strip("|").split("|")]
+
+            #skips any incomplete rows. in case a manual row was made wrong
+            if len(row_data) != len(header):
+                continue
+            
+            #creates a mapping for each header to its corresponding cell
+            row = dict(zip(header, row_data))
+            key = row.pop("Instance")
+            best_dict[key] = row
+            
+    return best_dict
 ##
 # The following script assumes only valid solutions are present in the directories that it gathers performances from.
 #   If an invalid solution is present that it will be treated as valid, thus the validation and removal should be handled by a seperate script used upon posting of a solution.
@@ -12,16 +39,9 @@ def gather_algo_performance(results_dir, feature_dict_path, best_solutions_path,
     print("Processing Algorithm results...")
     
     algo_dict = {}
-    best_dict = {}
     
     # Load best known solutions
-    ## Might want to update this to be a static path directing to the markdown containing the best solutions instead.
-    with open(best_solutions_path, mode='r', newline='', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            key = row['Source']
-            row.pop('Source')
-            best_dict[key] = row
+    best_dict = get_best(best_solutions_path)
     
     # Load feature dictionary
     feature_dict = {}
@@ -75,27 +95,16 @@ def gather_algo_performance(results_dir, feature_dict_path, best_solutions_path,
     
     print(f"Results saved to {output_csv}")
 
-def test():
+def run():
     start = time.time()
-    result_dir = "./Resources/results from GVC"
-    feature_path = "./Resources/InstanceFeatures.csv" # this value could remain static.
-    best_solutions = "./Resources/best.csv"           # Could be changed to the markdown 
-    output = "./Resources/algoPerf.csv"
+    result_dir = "../Resources/solutions"  
+    feature_path = "../Resources/InstanceFeatures.csv" # this value could remain static.
+    best_solutions = "../best_solutions.md" 
+    output = "../Resources/algoPerf.csv"
     gather_algo_performance(result_dir, feature_path, best_solutions, output)
 
     end = time.time()
     print(end-start)
 
-test() # might be fine for now, could have this remain like this, and just be completely static..
+run() # might be fine for now, could have this remain like this, and just be completely static..
 
-'''
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Gather algorithm performance results.")
-    parser.add_argument("--results_dir", required=True, help="Path to the directory containing algorithm results.")
-    parser.add_argument("--feature_dict", required=True, help="Path to the feature dictionary CSV file.")
-    parser.add_argument("--best_solutions", required=True, help="Path to the best known solutions CSV file.")
-    parser.add_argument("--output_csv", required=True, help="Path to the output CSV file.")
-    
-    args = parser.parse_args()
-    gather_algo_performance(args.results_dir, args.feature_dict, args.best_solutions, args.output_csv)
-'''
