@@ -52,9 +52,20 @@ def gather_algo_performance(results_dir, feature_dict_path, best_solutions_path,
     
     # Identify available algorithms by scanning the directory
     algos = [d for d in os.listdir(results_dir) if os.path.isdir(os.path.join(results_dir, d))]
+
+    existing_algos = set()
+    if os.path.exists(output_csv):
+        with open(output_csv, mode= 'r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                instance_name= row['instance_name']
+                algo_dict[instance_name] = {key: (int(value) if value.isdigit() else value) for key, value in row.items() if key != 'instance_name'}
+                existing_algos.update(row.keys())
     
     for instance_name in feature_dict:
-        algo_dict[instance_name] = {}
+        if instance_name not in algo_dict:
+            algo_dict[instance_name] = {}
+
         algo_dict[instance_name]['best_performance'] = int(feature_dict[instance_name]['feature_num_vertices'])
         bestname = instance_name.replace(".col", "")
         filename = instance_name.replace(".col", ".sol")
@@ -82,10 +93,12 @@ def gather_algo_performance(results_dir, feature_dict_path, best_solutions_path,
         if bestname not in best_dict:
             algo_dict[instance_name]['best'] = algo_dict[instance_name]['best_performance']
     
+    all_algos = sorted(existing_algos.union(algos))
+
     # Write output to CSV 
     # Should probably remove best_performance here since it makes more sense to handle based on the individual metadatafiles as opposed to based on all the algorithms
     # that may or may not be tested already, in the long run it should become obsolete anyways
-    fieldnames = ['instance_name', 'best', 'best_performance'] + algos
+    fieldnames = ['instance_name', 'best', 'best_performance'] + all_algos
     with open(output_csv, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
