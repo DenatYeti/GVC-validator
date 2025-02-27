@@ -192,7 +192,7 @@ def process_file(file, path):
         print(f"All features of {file} calculated")# once all files are handled end loop.
     return feature_dict 
 
-def calc_features(path):
+def calc_features(path, existingNames = []):
     print("Calculating features")
     feature_dict = {}
 
@@ -211,8 +211,10 @@ def calc_features(path):
                     # If the instance does not exist, add it as a new entry
                     feature_dict[instance] = values
 
-    with ThreadPoolExecutor(max_workers=2) as executor:  # Set max_workers based on your CPU
-        futures = {executor.submit(process_file, file, path): file for file in col_files}  # Submit all tasks
+    filtered_files = [file for file in col_files if file not in existingNames] 
+
+    with ThreadPoolExecutor(max_workers=4) as executor:  # Set max_workers based on your CPU
+        futures = {executor.submit(process_file, file, path): file for file in filtered_files}  # Submit all tasks
         for future in futures:
             features = future.result()  # Get the result of the processing
             thread_safe_update(features)  # Update dictionary safely
@@ -223,40 +225,41 @@ def calc_features(path):
 # Takes a path to a directory containing instances, then extracts features from those instances and saves them in a CSV file named InstanceFeatures.csv
 ##
 def generate_feature_file(path):
-    # get the features and algorithms used to create a header for the CSV file.
-    feature_dict = calc_features(path)
-    first_instance_features = list(next(iter(feature_dict.values())).keys()) # gets the headers dynamically.
-    header = ['feature_' + feature for feature in first_instance_features]
-
     filename = "../Resources/InstancesFeatures.csv"
+    existing_instances = set()
+
     if os.path.exists(filename):
-        existing_instances = set()
         with open(filename, mode = "r", newline="") as file:
             reader = csv.reader(file)
             next(reader,None) # This skips the header file.
             for row in reader:
                 if row:
                     existing_instances.add(row[0])
-        
+    
+    # get the features and algorithms used to create a header for the CSV file.
+    feature_dict = calc_features(path,existing_instances)
+
+    if not feature_dict:
+        print("No new instances")
+        return 0
+    
+    first_instance_features = list(next(iter(feature_dict.values())).keys()) # gets the headers dynamically.
+    header = ['feature_' + feature for feature in first_instance_features]
+
+    if os.path.exists(filename):
         with open(filename, mode = "a", newline="") as file:
             writer = csv.writer(file)
-            for feature_source, features in feature_dict.items():
-                if feature_source not in existing_instances:
-                    row = list(features.values())
-                    writer.writerow(row)
+            for _, features in feature_dict.items():
+                writer.writerow(list(features.value()))
         print(f"Updated {filename} with new instances.")
-    else:    
+    else:
         with open(f"../Resources/InstanceFeatures.csv", mode="w", newline="") as file:
             writer = csv.writer(file)
-
             # write the headers on the first row, followed by the information from the lists on the following rows.
             writer.writerow(header)
-            for instance_name, features in feature_dict.items():
-                row = list(features.values()) #dynamic addition of the features.
-
-                writer.writerow(row)
-                    
-        print(f"file: InstanceFeatures.csv created")
+            for _, features in feature_dict.items():
+                writer.writerow(list(features.values()))            
+        print(f"file: {filename} created")
 
 def run():
     path = '../Resources/instances'
