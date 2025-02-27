@@ -25,76 +25,35 @@ def gather_features(path):
 #   This method assumes that all solutions passed to it are valid, this is done since i want to use the github action to check the validity of solutions instead.
 #       Could consider having the action delete non valid solutions.
 ##
-def algo_performance(algos, feature_dict,path_to_best): 
+def gather_algo_results(algos, path_to_csv): 
     print("Processing Algorithm results...")
 
     algo_dict = {}
-    best_dict = {}
 
-    with open(path_to_best, mode='r',newline='',encoding='utf-8') as file:
+    with open(path_to_csv, mode='r', newline='', encoding='utf-8') as file:
         reader = csv.DictReader(file)
+        
+        # Iterate through each row in the CSV
         for row in reader:
-            key = row['Source']
-            row.pop('Source')
-            best_dict[key] = row
-            
-    for instance_name in feature_dict:
-        algo_dict[instance_name] = {}
-        algo_dict[instance_name]['best_performance'] = int(feature_dict[instance_name]['feature_num_vertices'])
-        temp_list = []
-        
-        # Some other software should execute the code here, otherwise the certificates are expected to have the same name as their instance files and be stored in appropriate folders.
-        filename = instance_name.replace(".col", ".sol") #changing file name to allow for matching in the subfolders.
-        bestname = instance_name.replace(".col","")
-        
-        #if a best known solutions is known, add that as the "best algos" result, and update det best performance measure.
-        if bestname in best_dict:
-            algo_dict[instance_name]['best'] = int(best_dict[bestname]['best'])
-            algo_dict[instance_name]['best_performance'] = int(best_dict[bestname]['best'])
+            instance_name = row['instance_name']
+            algo_dict[instance_name] = {}
 
-        #looking for the subpaths that match the algorithms
-        #   This assumes that the algorithm performances are stored in a folder with a name matching the algorithms.
-        for algo in algos:
-            algo_path = os.path.join("./Resources/results from GVC/", algo)
-            
-            if os.path.isdir(algo_path):
-                #print(f"Checking for directory: {algo_path}")
-                
-                for subdir_name in os.listdir(algo_path):
-                    subdir_path = os.path.join(algo_path, subdir_name)
-                    #print(f"    Looking in {subdir_path} for {filename}")
+            # Extract the best known performance for this instance from the 'best' column
+            algo_dict[instance_name]['best_performance'] = int(row['best_performance'])
 
-                    if filename in os.listdir(subdir_path):
-                        #print(f"Found file: {filename} in {subdir_path}") 
-                    
-                        f = open(os.path.join(subdir_path, filename), mode = "r") 
-                        temp_list = []   
-                        for line in f:
-                            line = line.strip()  # Remove extra whitespace
-                            temp_list.append(int(line))  # Convert to integer before adding
-                        # get the set of all numbers in the file
-                        temp_set = set(temp_list)
-                        chromatic = len(temp_set)
-                        algo_dict[instance_name]['best_performance'] = min(algo_dict[instance_name]['best_performance'], chromatic)
-                        algo_dict[instance_name][algo] = chromatic
-                        f.close()
+            # Iterate through each algorithm column and add the performance data
+            for algo in algos:
+                if algo in row:
+                    algo_dict[instance_name][algo] = float(row[algo]) if row[algo] else float('nan')
+                else:
+                    # If the algorithm column does not exist, set it to NaN
+                    algo_dict[instance_name][algo] = float('nan')
 
-                        break           # break here since we know only one solution pr instance pr algo folder                        
-                    elif "_logs" in subdir_name:
-                        pass
-                    else:
-                        print(f"File {filename} not found in {subdir_path}")
-                        algo_dict[instance_name][algo] = float('nan')
-            else:
-                print(f"Algorithm directory {algo_path} does not exist")
-                algo_dict[instance_name][algo] = float('nan')
-        
-        #adds the best solutions as the result of the "best algorithm" in case one wasnt known prior
-        if bestname not in best_dict:
-            algo_dict[instance_name]['best'] = algo_dict[instance_name]['best_performance']
+            # If the "best" algorithm is known from the CSV, copy the value from the "best" column
+            if 'best' in row:
+                algo_dict[instance_name]['best'] = int(row['best'])
 
     return algo_dict
-
 
 #this needs a big update as it doesnt do what i want it to do.
 #also needs to add some feature selection
@@ -129,10 +88,10 @@ def z_score_standardize(feature_dict):
 
     return standardized_dict
 
-def make_file(algos, path, filename, standardize = False): 
+def make_file(algos, filename, standardize = False): 
     # collect the dictionaries needed for file creation
-    feature_dict = gather_features(path+'/InstanceFeatures.csv') # A static file that should be updated when a new instance is added.
-    algo_dict = algo_performance(algos, feature_dict, path+'/best.csv')
+    feature_dict = gather_features('../Resources/InstanceFeatures.csv') # A static file that should be updated when a new instance is added.
+    algo_dict = gather_algo_results(algos, "../Resources/algoPerf.csv")
 
     algo_best = algos+ ['best'] # grabs the best as to calculate the performance ratio later.
 
@@ -144,40 +103,33 @@ def make_file(algos, path, filename, standardize = False):
     if standardize:
         feature_dict = z_score_standardize(feature_dict)
     
-    with open(f"./isa/{filename}", mode="w", newline="") as file: # SHOULD UPDATE TO NO LONGET TAKE A FILENAME BUT AN ISA PATH INSTEAD
+    with open(f"{filename}", mode="w", newline="") as file: # SHOULD UPDATE TO NO LONGET TAKE A FILENAME BUT AN ISA PATH INSTEAD
         writer = csv.writer(file)
 
-        if filename == 'metadata.csv': 
-        # write the headers on the first row, followed by the information from the dict on the following rows.
-            writer.writerow(['instances', 'source'] + header + algorithms)
-            iterator = 1 
-            for instance_name, features in feature_dict.items():
-                row = [
-                    iterator,                                 # Indexing
-                    instance_name                             # Instance name
-                ] + list(features.values()) #dynamic addition of the features.
+    # write the headers on the first row, followed by the information from the dict on the following rows.
+        writer.writerow(['instances', 'source'] + header + algorithms)
+        iterator = 1 
+        for instance_name, features in feature_dict.items():
+            row = [
+                iterator,                                 # Indexing
+                instance_name                             # Instance name
+            ] + list(features.values()) #dynamic addition of the features.
 
-                # Generically adds the performances of the algorithms to the row.
-                best_perf = algo_dict[instance_name]['best_performance']
+            # Generically adds the performances of the algorithms to the row.
+            best_perf = algo_dict[instance_name]['best_performance']
 
-                for algo in algo_best:
-                    algo_perf = algo_dict[instance_name][algo]               
-                    if best_perf != 0: # avoids division by zero
-                        perf_ratio = (algo_perf - best_perf) / best_perf
-                        #print(perf_ratio)
-                    else: 
-                        perf_ratio = float('nan')
-                    row.append(perf_ratio)
+            for algo in algo_best:
+                algo_perf = algo_dict[instance_name][algo]
+                if best_perf != 0: # avoids division by zero
+                    perf_ratio = (algo_perf - best_perf) / best_perf
+                    #print(perf_ratio)
+                else: 
+                    perf_ratio = float('nan')
+                row.append(perf_ratio)
 
-                writer.writerow(row)
-                iterator += 1    
-            
-        elif filename == 'data.csv':
-            data_header = [col.removeprefix("feature_") for col in header]
-            writer.writerow(data_header)
-            for instance_name, features in feature_dict.items():
-                row = list(features.values())
-                writer.writerow(row)
+            writer.writerow(row)
+            iterator += 1    
+
 
     print(f"file: {filename} created")
     
@@ -185,22 +137,18 @@ def make_file(algos, path, filename, standardize = False):
     # figure out how this is done.
 def test():
     timestamp = time.time()
-
-    path = './Resources'
-    algos = ['DSATUR', 'Greedy', 'RLF','HEA','TABUCOL'] 
+    algos = ['DSATUR'] 
     standardize = False
     
-    make_file(algos, path, "data.csv")
-    make_file(algos, path, "metadata.csv", standardize)
+    make_file(algos, "../analysis/test/metadata.csv", standardize)
 
     end = time.time()
     print(end - timestamp)
     
-    os.chdir("./isa")
+    os.chdir("../analysis/test")
     os.system("isa")
 
 test()
-#matilda_test_file()
 '''
 if __name__ == "__main__":
     #could for the page, just remove pyhard and instead only use pyispace, and then print the plots myself as i am already somewhat doing.
