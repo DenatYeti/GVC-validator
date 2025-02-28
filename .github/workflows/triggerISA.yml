@@ -22,6 +22,7 @@ jobs:
 
     - name: Execute Scripts #currently static but could be made more generic based on changes in the config
       run: python isaAction.py --dir test
+      working-directory: src/
 
     - name: Commit and Push Changes
       if: success()
