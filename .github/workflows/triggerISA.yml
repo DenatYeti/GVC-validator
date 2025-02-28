@@ -19,6 +19,7 @@ jobs:
 
     - name: Install dependencies
       run: pip install -r requirements.txt || true
+      working-directory: /src
 
     - name: Execute Scripts #currently static but could be made more generic based on changes in the config
       run: python isaAction.py --dir test
