@@ -26,6 +26,13 @@ jobs:
           instance=$(basename "$solution" .sol).col
           python src/checker.py Resources/instances/$instance $solution || exit 1
         done
+    
+    - name: Update algorithm performance files
+      if: success()
+      run: |
+        # Script which gathers algorithm performances
+        python performance_extractor.py
+      working-directory: src/
  
     - name: Update best solutions
       if: success()
