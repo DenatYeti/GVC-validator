@@ -4,12 +4,12 @@ import yaml # used for the config.yaml file that will need to be updated to trig
 import json # for creating the options.json file 
 
 def create_subdirs(dir_name):
-    os.makedirs(f"../analysis/{dir_name}", exists_ok = True)
+    os.makedirs(f"../analysis/{dir_name}")
     print("Analysis directory created")
     # create the option file based on a config
     algos = read_config(dir_name) # could probably move this out from here but its not needed atm
     
-    os.makedirs(f"../docs/{dir_name}", exist_ok = True)
+    os.makedirs(f"../docs/{dir_name}")
     print("Pages directory created")
     
     with open("../docs/testDir/page.html", mode = 'rb') as src_file:
