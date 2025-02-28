@@ -28,7 +28,7 @@ def read_config(dir_name):
     
     config.pop('algos', None) # removing algos as its the only field not pertaining to the options file
 
-    with open(f'../analysis/{dir_name}/options.json') as json_file:
+    with open(f'../analysis/{dir_name}/options.json', mode = 'w') as json_file:
         json.dump(config, json_file, indent=4)
 
     print("Options File created saved")
