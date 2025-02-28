@@ -46,6 +46,6 @@ jobs:
         git config --global user.name 'github-actions'
         git config --global user..email 'github-actions@github.com'
         git add best_solutions.md
-        git add /Resources/algoPerf.csv
+        git add Resources
         git commit -m "Updated best known solutions" || exit 0
         git push
