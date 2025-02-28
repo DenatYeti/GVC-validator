@@ -1,7 +1,6 @@
 algos: # list of the algorithms to be used for ISA
   - DSATUR
   - RLF
-  - Greedy
 
 ##
 # All below metrics are used to perform Instance Space Analysis
