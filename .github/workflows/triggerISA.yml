@@ -1,0 +1,34 @@
+name: Trigger Instance Space Analysis
+
+on: 
+  push:
+    paths: 
+        - "config.yaml"
+
+jobs: 
+  triggerISA:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt || true
+
+    - name: Execute Scripts #currently static but could be made more generic based on changes in the config
+      run: py isaAction.py --dir test
+
+    - name: Commit and Push Changes
+      if: success()
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user..email 'github-actions@github.com'
+        git add docs
+        git add analysis
+        git commit -m "Generated new Instance Space Analysis" || exit 0
+        git push

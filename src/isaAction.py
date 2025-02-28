@@ -42,7 +42,8 @@ def run(dir_name):
     os.chdir("../../src")
     os.system(f"python coordinateBuilder.py --input ../analysis/{dir_name} --o ../docs/{dir_name}")
 
-
-
-# Takes the name of the subdirectories that are to be created
-#if __name__ == "__main__":
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="triggers ISA")
+    parser.add_argument("--dir", required=True, help= "A name for the specified directory")
+    args = parser.parse_args()
+    run(args.dir)
