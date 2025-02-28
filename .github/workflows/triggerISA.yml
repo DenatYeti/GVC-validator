@@ -21,7 +21,7 @@ jobs:
       run: pip install -r requirements.txt || true
 
     - name: Execute Scripts #currently static but could be made more generic based on changes in the config
-      run: py isaAction.py --dir test
+      run: python isaAction.py --dir test
 
     - name: Commit and Push Changes
       if: success()
