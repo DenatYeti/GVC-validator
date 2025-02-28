@@ -3,7 +3,7 @@ name: Extracting Features From New Instances
 on: 
   push:
     paths:
-      -Resources/instances/*.col
+      - Resources/instances/*.col
 
 jobs:
   extracting:
