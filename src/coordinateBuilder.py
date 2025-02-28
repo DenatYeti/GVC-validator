@@ -78,14 +78,14 @@ def gatherCoordinates(path):
 
     return coordinate_dict
 
-def makefile(filename, path):
+def makefile(filepath, path):
     dict = gatherCoordinates(path)
     
     # Ensure 'instance_name' is the first column
     feature_names = ['instance_name'] + [feature for feature in next(iter(dict.values())).keys() if feature != 'instance_name']
     
     #creates the csv file in case its usefull.
-    with open(filename, mode="w", newline="") as file:
+    with open(f"{filepath}/data.csv", mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(feature_names)
 
@@ -93,15 +93,15 @@ def makefile(filename, path):
             row = [values['instance_name']] + [values[feature] for feature in feature_names if feature != 'instance_name']
             writer.writerow(row)
 
-    print(f"file: {filename} created")
+    print(f"files: {filepath}/data.csv created")
 
     # This should be modified to be placed in different sub directories later
-    df = pd.read_csv(filename)
+    df = pd.read_csv(f"{filepath}/data.csv")
     df.head()
 
     data = df.to_json(orient="records", indent = 4)
     js_content = f"const jsonData = {data};"
-    with open("data.js", "w") as file:
+    with open(f"{filepath}/data.js", "w") as file:
         file.write(js_content)
     print ("data.js created")
 

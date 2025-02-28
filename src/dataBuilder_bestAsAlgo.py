@@ -148,13 +148,13 @@ def test():
     os.chdir("../analysis/test")
     os.system("isa")
 
-test()
-'''
 if __name__ == "__main__":
     #could for the page, just remove pyhard and instead only use pyispace, and then print the plots myself as i am already somewhat doing.
     parser = argparse.ArgumentParser(description=" This script takes a directory, a list of algorithms and a name for the outputfile, generating METADATA needed to perform ISA using pyhard")
-    parser.add_argument("--dir", required=True, help="The directory containing the algorithm performance folder, and a file containing the features of the instances.")
     #could default to use all or simply the 5 thats been tested.
     parser.add_argument("--a", required=True, help="A list of algorithms to be used, names must correspond with the foldernames where the solution certificates are located, where a certificate must share a name with the instance it solves.")
-    parser.add_argument("--o", required=True, help="Name of the output file")
-'''
+    parser.add_argument("--o", required=True, help="path to the output directory")
+    args = parser.parse_args()
+    algos = args.a.split(",")
+    make_file(algos, f"{args.o}/metadata.csv")
+
