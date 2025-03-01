@@ -88,7 +88,7 @@ def z_score_standardize(feature_dict):
 
     return standardized_dict
 
-def make_file(algos, filename, standardize = False): 
+def make_file(algos, filepath, standardize = False): 
     # collect the dictionaries needed for file creation
     feature_dict = gather_features('../Resources/InstanceFeatures.csv') # A static file that should be updated when a new instance is added.
     algo_dict = gather_algo_results(algos, "../Resources/algoPerf.csv")
@@ -103,7 +103,7 @@ def make_file(algos, filename, standardize = False):
     if standardize:
         feature_dict = z_score_standardize(feature_dict)
     
-    with open(f"{filename}", mode="w", newline="") as file: # SHOULD UPDATE TO NO LONGET TAKE A FILENAME BUT AN ISA PATH INSTEAD
+    with open(f"{filepath}", mode="w", newline="") as file: # SHOULD UPDATE TO NO LONGET TAKE A FILENAME BUT AN ISA PATH INSTEAD
         writer = csv.writer(file)
 
     # write the headers on the first row, followed by the information from the dict on the following rows.
@@ -131,7 +131,7 @@ def make_file(algos, filename, standardize = False):
             iterator += 1    
 
 
-    print(f"file: {filename} created")
+    print(f"file created in path: {filepath}")
     
 # Have to update such that it takes a path and some algorithms as input.
     # figure out how this is done.
@@ -156,5 +156,6 @@ if __name__ == "__main__":
     parser.add_argument("--o", required=True, help="path to the output directory")
     args = parser.parse_args()
     algos = args.a.split(",")
-    make_file(algos, f"{args.o}/metadata.csv")
+    path = os.path.join(args.o, "metadata.csv")
+    make_file(algos, path)
 
