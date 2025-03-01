@@ -2,6 +2,9 @@ import os
 import argparse
 import yaml # used for the config.yaml file that will need to be updated to trigger an ISA.
 import json # for creating the options.json file 
+import csv
+import dataBuilder_bestAsAlgo as builder
+import coordinateBuilder as coordinate
 
 def create_subdirs(dir_name):
     os.makedirs(f"../analysis/{dir_name}")
@@ -31,19 +34,22 @@ def read_config(dir_name):
     with open(f'../analysis/{dir_name}/options.json', mode = 'w') as json_file:
         json.dump(config, json_file, indent=4)
 
+    with open(f'../analysis/{dir_name}/metadata.csv', mode = 'w') as file:
+        csv.writer(file).writerow(['test'])
+
     print("Options File created saved")
     return algorithms
 
 # the format of the algos is currently incorrect when handed on to the system call
 def run(dir_name):
     algos = create_subdirs(dir_name)
-    output_dir = os.path.abspath(f"./analysis/{dir_name}")
-    os.system(f'python dataBuilder_bestAsAlgo.py --a "{ ",".join(algos) }" --o {output_dir}')
+    output_dir = os.path.abspath(f"../analysis/{dir_name}")
+    builder.make_file(algos, output_dir)
     os.chdir(f"../analysis/{dir_name}")
     os.system("isa")
     os.chdir("../../src")
-    os.system(f"python coordinateBuilder.py --input ../analysis/{dir_name} --o ../docs/{dir_name}")
-
+    coordinate.makefile(f"../analysis/{dir_name}", f"../doc/{dir_name}")
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="triggers ISA")
     parser.add_argument("--dir", required=True, help= "A name for the specified directory")

@@ -103,7 +103,7 @@ def make_file(algos, filepath, standardize = False):
     if standardize:
         feature_dict = z_score_standardize(feature_dict)
     
-    with open(f"{filepath}", mode="w", newline="") as file: # SHOULD UPDATE TO NO LONGET TAKE A FILENAME BUT AN ISA PATH INSTEAD
+    with open(os.path.join(filepath, "metadata.csv") , mode="w", newline="") as file:
         writer = csv.writer(file)
 
     # write the headers on the first row, followed by the information from the dict on the following rows.
@@ -156,6 +156,5 @@ if __name__ == "__main__":
     parser.add_argument("--o", required=True, help="path to the output directory")
     args = parser.parse_args()
     algos = args.a.split(",")
-    path = os.path.join(args.o, "metadata.csv")
-    make_file(algos, path)
+    make_file(algos, f"{args.o}")
 
