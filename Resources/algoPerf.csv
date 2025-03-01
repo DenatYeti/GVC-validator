@@ -10,3 +10,8 @@ instance_name,best,best_performance,DSATUR,Greedy,RLF
 2-FullIns_5.col,7,7,7,11,7
 2-Insertions_3.col,4,4,4,4,4
 2-Insertions_4.col,5,5,5,6,5
+2-Insertions_5.col,6,6,6,6,6
+3-FullIns_4.col,405,405,nan,nan,nan
+3-FullIns_3.col,6,6,6,6,6
+3-Insertions_3.col,56,56,nan,nan,nan
+3-FullIns_5.col,2030,2030,nan,nan,nan
