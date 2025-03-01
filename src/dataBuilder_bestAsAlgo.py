@@ -132,6 +132,7 @@ def make_file(algos, filepath, standardize = False):
 
 
     print(f"file created in path: {filepath}")
+    return True
     
 # Have to update such that it takes a path and some algorithms as input.
     # figure out how this is done.
@@ -157,4 +158,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     algos = args.a.split(",")
     make_file(algos, f"{args.o}")
+
 

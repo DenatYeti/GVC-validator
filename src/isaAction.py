@@ -44,12 +44,11 @@ def read_config(dir_name):
 def run(dir_name):
     algos = create_subdirs(dir_name)
     output_dir = os.path.abspath(f"../analysis/{dir_name}")
-    builder.make_file(algos, output_dir)
-    os.chdir(f"../analysis/{dir_name}")
-    os.system("isa")
-    os.chdir("../../src")
-    coordinate.makefile(f"../analysis/{dir_name}", f"../doc/{dir_name}")
-    
+    success = builder.make_file(algos, output_dir)
+    if success:
+        os.system(f"isa -r ../analysis/{dir_name}")
+        coordinate.makefile(f"../doc/{dir_name}", f"../analysis/{dir_name}")
+            
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="triggers ISA")
     parser.add_argument("--dir", required=True, help= "A name for the specified directory")
