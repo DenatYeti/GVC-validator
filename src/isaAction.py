@@ -34,9 +34,10 @@ def read_config(dir_name):
     print("Options File created saved")
     return algorithms
 
+# the format of the algos is currently incorrect when handed on to the system call
 def run(dir_name):
     algos = create_subdirs(dir_name)
-    os.system(f"python dataBuilder_bestAsAlgo.py --a {algos} --o ./analysis/{dir_name}")
+    os.system(f'python dataBuilder_bestAsAlgo.py --a "{ ",".join(algos) }" --o ./analysis/{dir_name}')
     os.chdir(f"../analysis/{dir_name}")
     os.system("isa")
     os.chdir("../../src")
