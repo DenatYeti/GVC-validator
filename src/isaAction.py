@@ -49,12 +49,13 @@ def run(dir_name):
     if success:
         #out = pyispace.train_is(f"../analysis/{dir_name}/metadata.csv", f"../analysis/{dir_name}/options.json")
         #pyispace.scriptcsv(out, f"../analysis/{dir_name}")
-        os.chdir(f"../analysis/{dir_name}")
+        #os.chdir(f"../analysis/{dir_name}")
         # currently testing using pyhard again simply due to it being updated 
         ## would require the use of a config.yaml over an options.json
-        os.system("pyhard run --no-meta") 
-        os.chdir(f"../../src")
-        #os.system(f"isa -r ../analysis/{dir_name}")
+        #os.system("pyhard run --no-meta") 
+        #os.chdir(f"../../src")
+        os.system(f"isa -r ../analysis/{dir_name}")
+        ## Could also simply fail due to a lack of points.
         coordinate.makefile(f"../doc/{dir_name}", f"../analysis/{dir_name}")
 
 if __name__ == "__main__":
