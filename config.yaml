@@ -15,7 +15,7 @@ perf:
   AbsPerf: true
 
 general:
-  betaThreshold: 0.53
+  betaThreshold: 0.55
 
 parallel:
   flag: false
