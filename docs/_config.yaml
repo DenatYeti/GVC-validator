@@ -1,2 +1,3 @@
-theme: jekyll-theme-minimal
-
+theme: jekyll-theme-slate
+title: Graph-Vertex Coloring benchmarking
+description: This site is meant to further research aimed at the GVC problem.
