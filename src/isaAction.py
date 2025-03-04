@@ -15,7 +15,7 @@ def create_subdirs(dir_name):
     os.makedirs(f"../docs/{dir_name}")
     print("Pages directory created")
     
-    with open(f"../docs/test.html", mode = 'rb') as src_file:
+    with open(f"../docs/example/page.html", mode = 'rb') as src_file:
         with open(f"../docs/{dir_name}/page.html", mode= "wb") as dest_file:
             # reading and writing chunks at a time
             dest_file.write(src_file.read())

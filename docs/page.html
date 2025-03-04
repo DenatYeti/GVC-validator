@@ -3,55 +3,18 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dynamic ISA Plot</title>
+        <title>{{ site.title }}</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.14.0/plotly.min.js"></script>
-        <style>
-            /* Flexbox which allows for aligning the two plots to be placed side by side */
-            .container {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                width: 100%;
-                height: 90vh;
-            }
-            .plot-container{
-                width: 48%;
-            }
-            select {
-                width: 25%;
-                margin-bottom: 10px;
-            }
-
-            .description {
-                background: #f4f4f4;
-                padding: 10px;
-                border-radius: 8px;
-                margin-bottom: 10px;
-                display: none; /* Starts hidden */
-            }
-            .toggle-btn {
-                background: #007bff;
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                cursor: pointer;
-                font-size: 14px;
-                border-radius: 5px;
-            }
-            .toggle-btn:hover{
-                background: #0056b3;
-            }
-        </style>
+        <link rel="stylesheet" href=" assets/css/style.css">
     </head>
     <body>
-        <h1>Interactive Instance Space Analysis Plot</h1>
-
-        <!--Button that allows for hiding/showing the description box-->
+        <h1>{{ site.title }}</h1>
+        <p>{{ site.description }}</p>
+        
         <button class="toggle" onclick="toggleDescription()"> Show Feature Explanations</button>
 
-        <!--Box containing description that explain the features used for coloring the graphs-->
-        <div class = "description" id="descriptionBox">
-            <p><strong> Features exaplained:</strong></p>
+        <div class="description" id="descriptionBox">
+            <p><strong>Features explained:</strong></p>
             <p><strong>IsBetaEasy:</strong> Indicates whether an instance is denoted as easy based on the used Beta Threshold (default = 0.55) 
                 which denotes a percentage of instances that must have performance better than the performance threshold (0.0125 for the example), for an instance to be denoted as easy.</p>
             <p><strong>NumGoodAlgos:</strong> The number of algorithms, used in the analysis, that attains good performance on the given instance. </p>
@@ -81,7 +44,7 @@
             <p><strong>best:</strong> The best is an "algorithm" only in name for the isa, as the performance metric fro the analysis, is based on comparing to the best known solution, here best denotes those best known solutions.</p> 
         </div>
 
-        <div class = "container">
+        <div class="container">
             <div class="plot-container">
                 <label for="colorBy1">Color plot 1 by:</label>
                 <select id="colorBy1"></select>
@@ -95,15 +58,13 @@
             </div>
         </div>
        
-        
         <script src="data.js"></script>
         <script>
             async function drawPlot(plotId, dropdownId, colorBy = "IsBetaEasy") {
                 let data = jsonData;
-                
                 let keys = Object.keys(data[0]).filter(key => typeof data[0][key] === "number");
-                let dropdown = document.getElementById(dropdownId) 
-                let blacklist = ["z_1", "z_2"]
+                let dropdown = document.getElementById(dropdownId);
+                let blacklist = ["z_1", "z_2"];
 
                 if (dropdown.options.length === 0) {
                     keys.filter(key => !blacklist.includes(key) && !key.endsWith("raw"))
@@ -119,30 +80,17 @@
                 let y = data.map(d => d.z_2);
                 let color = data.map(d => d[colorBy]);
 
-                const reverseFeatures = [];//empty atm is easy to fix now, but unsure if it makes sense to mess with the coloring of the features
+                const reverseFeatures = [];
                 const reverseList = reverseFeatures.concat(keys.filter(key => key.endsWith("_perf")));
 
-                let trace; // Declare trace before the if-else
+                let trace = {
+                    x: x,
+                    y: y,
+                    mode: "markers",
+                    marker: { size: 8, color: color, colorscale: "Bluered", showscale: true, reversescale: reverseList.includes(colorBy)},
+                    text: data.map(d => `Instance: ${d.instance_name}<br>${colorBy}: ${d[colorBy]}`)
+                };
 
-                if (colorBy.endsWith("_bin") || colorBy.endsWith("_perf") || colorBy == "IsBetaEasy" || colorBy == "NumGoodAlgos") {
-                    trace = {
-                        x: x,
-                        y: y,
-                        mode: "markers",
-                        marker: { size: 8, color: color, colorscale: "Bluered", showscale: true, reversescale: reverseList.includes(colorBy)},
-                        text: data.map(d => `Instance: ${d.instance_name}<br>${colorBy}: ${d[colorBy]}`)
-                    };
-                } else {
-                    trace = {
-                        x: x,
-                        y: y,
-                        mode: "markers",
-                        marker: { size: 8, color: color, colorscale: "Bluered", showscale: true, reversescale: reverseList.includes(colorBy)},
-                        text: data.map(d => `Instance: ${d.instance_name}<br>${colorBy}: ${d[colorBy + "_raw"] || "N/A"}`)
-                    };
-                }
-
-                
                 let layout = {
                     title: "Instance Space Analysis",
                     width: window.innerWidth * 0.48,
@@ -150,14 +98,13 @@
                 };
 
                 Plotly.newPlot(plotId, [trace], layout, {
-                    modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d'], // prevents some buttons from being displayed
-                    displaylogo: false // removes the logo
+                    modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d'],
+                    displaylogo: false
                 });
             }
 
             drawPlot("plot1", "colorBy1");
             drawPlot("plot2", "colorBy2");
-
 
             document.getElementById("colorBy1").addEventListener("change", function() {
                 drawPlot("plot1","colorBy1",this.value);
@@ -178,10 +125,9 @@
                     btn.textContent = "Hide Feature Explanations";
                 } else {
                     descBox.style.display = "none";
-                    btn.textContent = "Show Feature Explanations"
+                    btn.textContent = "Show Feature Explanations";
                 }
             }
         </script>
-        
     </body>
 </html>

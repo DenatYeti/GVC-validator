@@ -6,6 +6,7 @@ import time
 TARGET_DIRS = ["analysis", "docs"]
 RETENTION_DAYS = 14  # Number of days before deletion (2 weeks)
 CURRENT_TIME = time.time()
+EXCLUSION_DIRS = ["_layouts", "assets", "example"]
 
 def delete_old_subdirectories(directory, retention_days):
     if not os.path.exists(directory) or not os.path.isdir(directory):
@@ -15,7 +16,7 @@ def delete_old_subdirectories(directory, retention_days):
     # Iterate through subdirectories
     for subdir in os.listdir(directory):
         subdir_path = os.path.join(directory, subdir)
-        if os.path.isdir(subdir_path):
+        if os.path.isdir(subdir_path) and subdir_path not in EXCLUSION_DIRS:
             # Get last modification time
             last_modified = os.path.getmtime(subdir_path)
             age_days = (CURRENT_TIME - last_modified) / 86400  # Convert seconds to days
