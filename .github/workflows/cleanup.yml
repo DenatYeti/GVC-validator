@@ -1,0 +1,21 @@
+name: Cleanup Old Subdirectories
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Runs every Sunday at midnight UTC
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Delete old subdirectories
+        run: python .github/scripts/deleteOldDirs.py
