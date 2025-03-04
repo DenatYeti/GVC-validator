@@ -15,7 +15,7 @@ jobs:
         python-version: '3.x'
 
     - name: Install dependencies (if any)
-      run: pip install -r requirements.txt || true
+      run: pip install numpy
       working-directory: src/
 
     - name: Extract features
