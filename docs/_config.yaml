@@ -1,12 +1,4 @@
 theme: jekyll-theme-minimal
+layout: default
 title: Test
 description: test
-exclude:
-  - "License" # not applicative atm.
-defaults:
-  - scope:
-      path: "example"
-      values:
-        title: "example"
-        description: "example description"
-        
