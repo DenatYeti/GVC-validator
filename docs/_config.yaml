@@ -1,4 +1,5 @@
 theme: jekyll-theme-minimal
 layout: home
+sidebar: true
 title: Graph-Vertex Coloring benchmarking Homepage
 description: This site is meant to further research aimed at the GVC problem.
