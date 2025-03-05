@@ -1,45 +1,56 @@
 name: Validate Graph Coloring Solutions
- 
+
+# Defines a trigger condition for the action.
 on:
-  push:
+  push: # On any push to a subdirectory of solutions, which includes .sol files.
     paths:
       - Resources/solutions/*/*.sol
- 
+
+# Assigns the jobs that are to be triggered.
 jobs:
-  validate:
-    runs-on: ubuntu-latest
+  validate: # Name of the job.
+    runs-on: ubuntu-latest # Defines the base image to be used.
     steps:
+    # Downloads the code of the repository onto a virtual machine.
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3 # checkout@v3 is an official action maintained by github.
  
+    # Sets up python as its needed to execute the scripts.
     - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
+      uses: actions/setup-python@v4
+      with: # Additional configuration context
         python-version: '3.x'
- 
+
+    # Installs any dependencies that might be needed.
     - name: Install dependencies (if any)
-      run: pip install -r requirements.txt || true
- 
+      run: pip install -r src/requirements.txt
+
+    # Validates that the solutions are correct.
     - name: Validate solutions
+      # Runs for all the solutions and checks them against the instance files with the same base names.
       run: |
         for solution in Resources/solutions/*/*.sol; do
           instance=$(basename "$solution" .sol).col
           python src/checker.py Resources/instances/$instance $solution || exit 1
         done
     
+    # Updates the algoPerf.csv file, to now contain the number of colors used in the newly added solutions.
     - name: Update algorithm performance files
-      if: success()
+      if: success() # Only triggers if the previous step succeeded, meaning only if all solutions were valid colorings.
+      # Executes the static script.
       run: |
         # Script which gathers algorithm performances
         python performance_extractor.py
-      working-directory: src/
- 
+      working-directory: src/ # Ensures correct working directory as the code assumes its being run from here.
+
+    # Updates the markdown containing the best known solutions.
     - name: Update best solutions
-      if: success()
+      if: success() # Triggers only if the previous steps succeeded. This ensure no false updates.
       run: |
         # Script to update best_solutions.md if a new upper bound is found
         python src/update_best.py
 
+    # Commits and pushes any changes.
     - name: Commit and Push Changes
       if: success()
       run: |

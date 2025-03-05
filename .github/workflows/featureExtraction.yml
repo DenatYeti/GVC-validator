@@ -1,31 +1,36 @@
 name: Extracting Features From New Instances
 
+# Sets up a trigger for the action.
 on: 
-  push:
+  push: # On a push to the directory in the specified path.
     paths:
       - Resources/instances/*.col
 
+# Assigns the jobs that are to be triggered.
 jobs:
-  extracting:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
+  extracting: # Name of the job.
+    runs-on: ubuntu-latest # Defines a base image.
+    
+    # Defines the steps of the job.
+    steps: 
+    - name: Checkout repository # Fetches code from the repo onto a virtual machine for execution.
+      uses: actions/checkout@v3 # checkout@v3 is an official action maintained by github.
+      with: 
         python-version: '3.x'
 
-    - name: Install dependencies (if any)
-      run: pip install numpy
-      working-directory: src/
+    - name: Install dependencies 
+      run: pip install numpy # Installs numpy as its needed for the action.
 
     - name: Extract features
-      run: python feature_extractor.py
-      working-directory: src/
+      run: python feature_extractor.py # Runs the feature extractor 
+      working-directory: src/ # Using the src/ directory as the working directory.
 
-    - name: Commit and Push Changes
-      if: success()
+    # Commit and push and changes made using this action to the repo.
+    - name: Commit and Push Changes 
+      if: success() # Only if the previous step succeeded, this should be executed.
+      # defines some credential and executes the commands for commiting and pushing
       run: |
-        git config --global user.name 'github-actions'
+        git config --global user.name 'github-actions' 
         git config --global user..email 'github-actions@github.com'
         git add Resources
         git commit -m "Updated InstanceFeatures.csv"
