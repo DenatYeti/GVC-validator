@@ -1,9 +1,11 @@
 name: Cleanup Old Subdirectories
 
+# Sets up a trigger condition
 on:
-  schedule:
+  schedule: # Automatic trigger during a specified time and day.
     - cron: '0 0 * * 0'  # Runs every Sunday at midnight UTC
 
+# Assigns the jobs that are to be triggered.
 jobs:
   cleanup:
     runs-on: ubuntu-latest
