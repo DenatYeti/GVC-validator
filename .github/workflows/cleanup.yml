@@ -7,8 +7,8 @@ on:
 
 # Assigns the jobs that are to be triggered.
 jobs:
-  cleanup:
-    runs-on: ubuntu-latest
+  cleanup: # Name of a job
+    runs-on: ubuntu-latest # Sets up an image.
 
     steps:
       - name: Checkout repository
