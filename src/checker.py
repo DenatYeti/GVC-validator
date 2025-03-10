@@ -21,7 +21,7 @@ def check_solution(dimacs_file, solution_file):
     for v1, v2 in edges:
         if colors[v1] == colors[v2]:
             print(f'color {v1}: {colors[v1]}')
-            return False, f"Invalid coloring: vertices {v1} and {v2} have the same color"
+            return False, f"Invalid coloring: vertices {v1} and {v2} have the same color in {solution_file}"
     return True, "Valid coloring"
  
 if __name__ == "__main__":
