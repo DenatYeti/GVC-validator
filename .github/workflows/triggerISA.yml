@@ -23,7 +23,9 @@ jobs:
 
     # Ensure dependencies are downloaded.
     - name: Install dependencies
-      run: pip install -r requirements.txt # Choses what to get based on the requirements.txt.
+      run: |
+        pip install -r requirements.txt # Choses what to get based on the requirements.txt.
+        pip install pyispace
       working-directory: src/ # Ensure that the correct working dir is used, could have been excluded here.
 
     # Execute the python script which contains the bulk of what the action does.

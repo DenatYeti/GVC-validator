@@ -2,7 +2,10 @@ algos: # list of the algorithms to be used for ISA
   - DSATUR
   - RLF
   - Greedy
-  
+
+# A name meant for the analysis/document folders
+dir: test2
+
 ##
 # All below metrics are used to perform Instance Space Analysis
 # Specifically these are used to create the options.json file
