@@ -13,28 +13,35 @@ dir: test3
 # using a CL call.
 ##
 perf:
-  epsilon: 0.0125
-  MaxPerf: false
-  AbsPerf: true
+  epsilon: 0.0125 # The performance threshold
+  MaxPerf: false # Whether we are working with a maximization or minimization problem.
+  AbsPerf: true # If we are using the absolute performance or the relative performance. 
 
 general:
-  betaThreshold: 0.55
+# A percentage threshold for how many algorithms need to have "good" 
+  # performance for an instance to be denoted as easy
+  betaThreshold: 0.55 
 
+# Chosing if the process should be run using parallel threads.
 parallel:
   flag: false
-  ncores: 2
+  ncores: 2 
 
 auto:
-  preproc: true
+  # denotes if preprocessing should be done, when working with the page this is needed.
+  preproc: true 
+  # this option is not properly implemented by pyispace.
   featsel: false
 
 bound:
-  flag: true
+  # Choses whether value bounding should be done on the features to eliminate extreme outliers.
+  flag: true  # setting this to false could help the issue with the reverse construction of a list of features.
 
 norm:
-  flag: true
+  # Turning normalization on or off. if preproc is already false this does not matter.
+  flag: true  
 
-corr:
+corr: 
   flag: true
   threshold: 10
 
