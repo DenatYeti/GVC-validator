@@ -30,7 +30,7 @@ jobs:
 
     # Execute the python script which contains the bulk of what the action does.
     - name: Execute Scripts #currently static but could be made more generic based on changes in the config
-      run: python isaAction.py --dir test
+      run: python isaAction.py
       working-directory: src/
 
     # Commits and pushes any changes that occured during the execution of this action.

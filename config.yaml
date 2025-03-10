@@ -4,7 +4,7 @@ algos: # list of the algorithms to be used for ISA
   - Greedy
 
 # A name meant for the analysis/document folders
-dir: test2
+dir: test3
 
 ##
 # All below metrics are used to perform Instance Space Analysis
