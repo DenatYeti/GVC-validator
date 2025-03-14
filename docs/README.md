@@ -11,4 +11,9 @@ All Algorithms have currently been run for a maximum of 10 minutes. Therefore fo
 To Trigger an Instance Space Analysis, one should modify the config.yaml found in the main directory of the repo, and push those changes. depending on the number of instances uses, the time to complete this task will vary.
 
 TODO:
-    Make a small getting started page that explains how to use the repo to generate the ISA and associated page in a more clear and descriptive way.
+    Make a small getting started page that explains how to:
+     1. Explain the process of adding new Instances to the repo (This works in the sense that their features are extracted but it is the users job to ensure that the algorithm certificates are also added to the algorithms that are to be used.) 
+     2. Post new algorithms to be used for ISA and benchmarking.
+     3. Use the repo to generate the ISA and associated page in a more clear and descriptive way.
+
+    modify the sidebar to hold links to the subpages containing the different analysis.
