@@ -16,4 +16,4 @@ TODO:
      2. Post new algorithms to be used for ISA and benchmarking.
      3. Use the repo to generate the ISA and associated page in a more clear and descriptive way.
 
-    Modify the sidebar to hold links to the subpages containing the different analysis, and getting started page
+Modify the sidebar to hold links to the subpages containing the different analysis, and getting started page
