@@ -2,6 +2,15 @@ To see an example output from an execution of an Instance Space Analysis you can
 
 ## Initial information regarding the algorithms used
 All Algorithms have currently been run for a maximum of 10 minutes. Therefore for a fair comparison with new algorithms they are expected to have had a similar limit on their allowed running time.
+For the homer.col instance there is a current issue and as such this instance should be skipped.
+
+## Posting your own algorithms
+To allow for analysis using user algorithms, the page allows for users to add algorithms to the test suite that can be used.
+This process is done by,
+1. Running your algorithm using the instances present in the Resources folder for the repository.
+2. Gathering the resulting .sol files in a directory called the name that the algorithm should be recognized as, ensuring no overlap with pre existing algorithms in the repository.
+
+This triggers a simple coloring-verifier that ensure that only valid solutions are present on the repository, in the case that an algorithm shows a better performance than previously denoted in the [best_solutions.md](./best_solutions.md) file, said file is updated to reflect this. 
 
 ## Running your own Instance Space Analysis
 To perform an Instance Space Analysis (ISA),
@@ -14,8 +23,7 @@ Ensure that the dir parameter does not overlap with an already existing docs sub
 
 4. Inspect and analyze the plots using the two for easier comparisons.
 
-
-
+## Adding additional Instances to better fill out the instance space.
 
 
 
