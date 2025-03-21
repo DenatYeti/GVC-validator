@@ -35,7 +35,7 @@ auto:
 
 bound:
   # Choses whether value bounding should be done on the features to eliminate extreme outliers.
-  flag: true  # setting this to false could help the issue with the reverse construction of a list of features.
+  flag: false  # setting this to false could help the issue with the reverse construction of a list of features.
 
 norm:
   # Turning normalization on or off. if preproc is already false this does not matter.
