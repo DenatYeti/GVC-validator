@@ -24,7 +24,11 @@ Ensure that the dir parameter does not overlap with an already existing docs sub
 4. Inspect and analyze the plots using the two for easier comparisons.
 
 ## Adding additional Instances to better fill out the instance space.
-
+To add more instance to the analysis,
+1. Push additional instance into the instance folder found in the Resources subdirectory.
+2. Run the solvers for the new instances. 
+3. Follow the Posting your own algorithms guide to add the new .sol files.
+4. Rerun the ISA, by modifying the dir to a new name this allows for differences between the two spaces to also be viewed and analyzed.
 
 
 TODO:
