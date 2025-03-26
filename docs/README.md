@@ -1,4 +1,5 @@
 To see an example output from an execution of an Instance Space Analysis you can follow this link: [Example](./example/page.html)
+To see the best known results: [best](./best/best_solutions.md)
 
 ## Initial information regarding the algorithms used
 All Algorithms have currently been run for a maximum of 10 minutes. Therefore for a fair comparison with new algorithms they are expected to have had a similar limit on their allowed running time.
