@@ -7,10 +7,10 @@ def read_solution_file(filename):
 
 def load_best_solutions():
     best_solutions = {}
-    if not os.path.exists("../docs/best_solutions.md"):
+    if not os.path.exists("../docs/best/best_solutions.md"):
         return best_solutions
     
-    with open("../docs/best_solutions.md", "r") as file:
+    with open("../docs/best/best_solutions.md", "r") as file:
         lines = file.readlines()
         for line in lines:
             if line.startswith("|") and not line.startswith("| Instance") and not line.startswith("|-"):
@@ -39,7 +39,7 @@ def update_best_solutions():
                     best_solutions[instance] = new_bound
                     algos[instance] = algorithm
     
-    with open("../docs/best_solutions.md", "w") as file:
+    with open("../docs/best/best_solutions.md", "w") as file:
         file.write("# Best Solutions for Graph Coloring Instances\n\n")
         file.write("| Instance | Best Upper Bound | Algorithm\n")
         file.write("|----------|------------------|-----------|\n")

@@ -29,10 +29,3 @@ To add more instance to the analysis,
 2. Run the solvers for the new instances. 
 3. Follow the Posting your own algorithms guide to add the new .sol files.
 4. Rerun the ISA, by modifying the dir to a new name this allows for differences between the two spaces to also be viewed and analyzed.
-
-
-TODO:
-    Make a small getting started page that explains how to:
-     1. Explain the process of adding new Instances to the repo (This works in the sense that their features are extracted but it is the users job to ensure that the algorithm certificates are also added to the algorithms that are to be used.) 
-     2. Post new algorithms to be used for ISA and benchmarking.
-     3. Use the repo to generate the ISA and associated page in a more clear and descriptive way.

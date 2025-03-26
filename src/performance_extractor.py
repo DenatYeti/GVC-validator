@@ -126,7 +126,7 @@ def run():
     start = time.time()
     result_dir = "../Resources/solutions"  
     feature_path = "../Resources/InstanceFeatures.csv" # this value could remain static.
-    best_solutions = "../best_solutions.md" 
+    best_solutions = "../docs/best/best_solutions.md" 
     output = "../Resources/algoPerf.csv"
     gather_algo_performance(result_dir, feature_path, best_solutions, output)
 
