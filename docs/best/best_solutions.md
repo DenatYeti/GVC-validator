@@ -1,6 +1,6 @@
 # Best Solutions for Graph Coloring Instances
 
-| Instance | Best Upper Bound | Algorithm
+| Instance | Best Achieved Solution | Algorithm
 |----------|------------------|-----------|
 | 1-FullIns_3.col | 4 | DSATUR |
 | 1-FullIns_4.col | 5 | DSATUR |

@@ -41,7 +41,7 @@ def update_best_solutions():
     
     with open("../docs/best/best_solutions.md", "w") as file:
         file.write("# Best Solutions for Graph Coloring Instances\n\n")
-        file.write("| Instance | Best Upper Bound | Algorithm\n")
+        file.write("| Instance | Best Achieved Solution | Algorithm\n")
         file.write("|----------|------------------|-----------|\n")
         for instance, bound in best_solutions.items():
             algo = algos.get(instance, "Unknown")
