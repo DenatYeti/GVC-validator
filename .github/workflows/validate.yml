@@ -48,7 +48,8 @@ jobs:
       if: success() # Triggers only if the previous steps succeeded. This ensure no false updates.
       run: |
         # Script to update best_solutions.md if a new upper bound is found
-        python src/update_best.py
+        python update_best.py
+      working-directory: src/
 
     # Commits and pushes any changes.
     - name: Commit and Push Changes
