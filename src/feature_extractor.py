@@ -8,7 +8,6 @@ import threading
 
 ##
 #   Works on python 3.9.13 
-#   Fails on python 3.13.0
 ##
 
 def shortest_path(adj, dimension):
